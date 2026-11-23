@@ -1,0 +1,14 @@
+{
+  "mid": 310224973,
+  "note": "要加监控视频：往 videos 里加一项 {\"bvid\": \"BV号\", \"label\": \"备注\"}。BV 号在创作中心稿件列表或视频页链接里。",
+  "videos": [
+    {"bvid": "BV1TwBsBkEZX", "label": "OPPO Find X9Pro（活动·632）"},
+    {"bvid": "BV1jzwLzfECq", "label": "华为折叠屏手机（319）"},
+    {"bvid": "BV1Dc7f6tEjW", "label": "芭乐·水果（205）"},
+    {"bvid": "BV1G1Lt6gE7b", "label": "丰田安全带卡扣（204）"},
+    {"bvid": "BV1aLWgzxEo5", "label": "过滤花洒是不是智商税（轻测评样板·167）"},
+    {"bvid": "BV1HkwyzJEQQ", "label": "麦朵尔 Max 大路灯（160）"},
+    {"bvid": "BV1ZDYSzTEo3", "label": "HUNTER 雨靴户外露营"},
+    {"bvid": "BV1wUtuzSEzZ", "label": "小屏手机（已改造标题+标签·48）"}
+  ]
+}
