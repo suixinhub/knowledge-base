@@ -40,6 +40,9 @@ nav:
       - 概览: 自媒体运营/index.md
       - B站选品分析报告: 自媒体运营/B站选品分析报告.md
       - B站内容改造执行清单: 自媒体运营/B站内容改造执行清单.md
+  - 资料:
+      - 概览: 资料/index.md
+      - 高性价比人生指南: 资料/高性价比人生指南.md
 
 markdown_extensions:
   - tables
