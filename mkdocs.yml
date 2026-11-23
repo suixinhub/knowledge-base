@@ -1,0 +1,50 @@
+site_name: 个人知识库
+site_description: 个人知识管理与沉淀
+site_url: https://suixinhub.github.io/knowledge-base/
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: 深色模式
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 亮色模式
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+
+nav:
+  - 首页: index.md
+  - 供应链包装:
+      - 概览: 供应链包装/index.md
+      - 包装主数据清单与数据流转: 供应链包装/包装主数据清单与数据流转.md
+      - 包装业务流与数据流设计: 供应链包装/包装业务流与数据流设计.md
+  - 自媒体运营:
+      - 概览: 自媒体运营/index.md
+      - B站选品分析报告: 自媒体运营/B站选品分析报告.md
+      - B站内容改造执行清单: 自媒体运营/B站内容改造执行清单.md
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - toc:
+      permalink: true
