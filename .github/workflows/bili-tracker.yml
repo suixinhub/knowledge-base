@@ -1,8 +1,10 @@
-name: Bili Tracker
+name: Bili Tracker (手动兜底)
+
+# 注意：B站会拦截海外服务器 IP（GitHub Actions 的美国机房实测全部被风控），
+# 所以日常采集在本机定时任务执行（WorkBuddy 自动化，每天 09:30）。
+# 这个工作流只保留手动触发，用于偶尔验证 Actions 侧是否已放行。
 
 on:
-  schedule:
-    - cron: "30 1 * * *"   # 每天 01:30 UTC = 北京时间 09:30
   workflow_dispatch: {}
 
 permissions:
@@ -34,6 +36,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore(bili): 每日数据快照 $(TZ=Asia/Shanghai date +%F)"
+            git commit -m "chore(bili): 数据快照 $(TZ=Asia/Shanghai date +%F)（Actions 兜底）"
             git push
           fi

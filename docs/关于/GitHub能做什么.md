@@ -46,14 +46,19 @@
 
 ## 五、本库正在跑的实例：B站数据跟踪
 
-`tracker/fetch_bili_stats.py` 每天北京时间 09:30 由 Actions 触发：
+`tracker/fetch_bili_stats.py` 每天北京时间 09:30 由本机定时任务触发：
 
 1. 读 `tracker/targets.json` 里的 BV 号清单
 2. 逐个调 B站公开接口（`x/web-interface/view`，无需登录），取播放/点赞/投币/收藏/弹幕/评论/分享
-3. 追加一行到 `data/stats.csv`（长期流水，可画趋势）
+3. 追加一行到 `data/stats.csv`（长期流水，可画趋势，同一天重复跑不重复记）
 4. 与上次记录比对算增量，重写 [B站数据跟踪](../自媒体运营/B站数据跟踪.md) 快照页
-5. 自动提交回仓库
+5. 通过 GitHub API 把数据提交回仓库
 
-要加监控视频，往 `targets.json` 的 `videos` 里加一项即可。手动触发：仓库 Actions 页 → Bili Tracker → Run workflow。
+要加监控视频，往 `targets.json` 的 `videos` 里加一项即可。
 
-一个踩过的坑值得记录：B站对匿名访问的**账号级**接口（粉丝数、空间页）有风控，会返回假数据（本机实测返回了随机昵称和 0 粉丝），但**单视频**接口（按 BV 号查播放量）是可靠的真实数据。所以跟踪按视频走，不按账号走。
+**两个实测踩到的坑，比方案本身更有价值**：
+
+1. **B站会拦截海外服务器 IP**。第一版把采集放在 GitHub Actions 上跑（美国机房），8 条视频全部被风控拒绝；换成"本机采集 + API 提交"后一次成功。结论：国内数据源的采集任务别放海外 runner，Actions 适合的是"源站在海外"或"目标服务不挑 IP"的任务。
+2. **匿名访问账号级接口会被喂假数据**。用 curl 直接查账号接口，返回了随机昵称和 0 粉丝（连空间页都被替换成假账号），但按 BV 号查单视频的接口是可靠的真实数据（与创作中心后台完全一致）。所以跟踪按视频走，不按账号走。
+
+本地重跑/验证：`python tracker/fetch_bili_stats.py`，然后 `python tools/push_kb.py "commit message"` 推送。

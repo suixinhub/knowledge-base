@@ -93,6 +93,7 @@ def main():
     print(f"[bili-tracker] {ts}  监控 {len(videos)} 条")
 
     rows = load_history()
+    seen = {(r["date"], r["bvid"]) for r in rows}
     new_rows, snapshot = [], []
 
     for v in videos:
@@ -102,11 +103,14 @@ def main():
             snapshot.append({"bvid": bvid, "label": v.get("label", ""),
                              "error": True})
             continue
-        rec = {"date": today, "bvid": bvid, "title": s["title"],
-               **{k: s[k] for k in FIELDS[3:]}}
-        rows.append(rec)
-        new_rows.append(rec)
-        prev = prev_record([r for r in rows if r is not rec], bvid, today)
+        if (today, bvid) in seen:   # 幂等：同一天重复跑不重复记录
+            rec = next(r for r in rows if r["date"] == today and r["bvid"] == bvid)
+        else:
+            rec = {"date": today, "bvid": bvid, "title": s["title"],
+                   **{k: s[k] for k in FIELDS[3:]}}
+            rows.append(rec)
+            new_rows.append(rec)
+        prev = prev_record(rows, bvid, today)
         snapshot.append({
             "bvid": bvid, "label": v.get("label", ""), "title": s["title"],
             "stats": s, "prev": prev,
@@ -131,8 +135,9 @@ def main():
         f"> 最近更新：**{ts}**（北京时间） · 数据源：B站公开接口 `x/web-interface/view`，无需登录，取数为实时值。",
         "",
         "监控清单在 [`tracker/targets.json`](https://github.com/suixinhub/knowledge-base/blob/main/tracker/targets.json)，"
-        "要加视频就往 `videos` 里加一项 `{\"bvid\": \"BV号\", \"label\": \"备注\"}`，"
-        "每天 09:30 由 GitHub Actions 自动采集并提交，也可以在仓库的 Actions 页面手动触发。",
+        "要加视频就往 `videos` 里加一项 `{\"bvid\": \"BV号\", \"label\": \"备注\"}`。"
+        "每天 09:30 由本机定时任务采集并通过 GitHub API 自动提交；"
+        "仓库 Actions 仅作手动兜底（B站会拦截海外服务器 IP，Actions 上采集会失败）。",
         "",
         "## 最新快照",
         "",
